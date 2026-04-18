@@ -1,0 +1,21 @@
+# Build outputs
+*.exe
+*.out
+*.app
+
+# Object files
+*.o
+*.obj
+
+# Libraries
+*.a
+*.lib
+*.dll
+*.so
+*.dylib
+
+# Debug symbols and build metadata
+*.pdb
+*.ilk
+*.dSYM/
+

@@ -19,3 +19,5 @@
 *.ilk
 *.dSYM/
 
+# Assets
+assets/*

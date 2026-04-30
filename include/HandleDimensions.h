@@ -23,5 +23,10 @@ public:
     void Update();
     void Draw() const;
 
+    // draws the initial png colors only
+    void Draw_MapDebug() const;
+
     std::vector<Dimension> dimensions;
+
+    int currentDimensionIndex = 0;
 };

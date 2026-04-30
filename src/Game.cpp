@@ -1,8 +1,10 @@
 #include "Game.h"
 
-void Game::RunGame() {
+void Game::run() {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Raylib Starter Template");
     SetTargetFPS(60);
+
+    handleDimensions.dimensions.emplace_back("assets\\misc\\Dimension0.png");
 
     while (!WindowShouldClose())
     {
@@ -26,8 +28,7 @@ void Game::Draw() {
     BeginDrawing();
     ClearBackground(RAYWHITE);
 
-    // Draw game elements here
-    DrawText("Hello, Raylib!", 10, 10, 20, DARKGRAY);
+    handleDimensions.Draw_MapDebug();
 
     EndDrawing();
 }

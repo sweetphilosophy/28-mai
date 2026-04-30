@@ -136,3 +136,44 @@ int Dimension::getHeight() const {
 Dimension::Dimension(std::string filename) {
     LoadFromFile(filename);
 }
+
+void HandleDimensions::Update() {
+    // Placeholder for any future updates (e.g., animations, dynamic changes)
+}
+
+void HandleDimensions::Draw() const {
+    // Placeholder for any future updates
+}
+
+void HandleDimensions::Draw_MapDebug() const {
+
+    if (dimensions.empty()) {
+        TraceLog(LOG_WARNING, "No dimensions to draw.");
+        return;
+    }
+
+    if (currentDimensionIndex < 0 || currentDimensionIndex >= (int)dimensions.size()) {
+        TraceLog(LOG_ERROR, "Current dimension index out of bounds: %i", currentDimensionIndex);
+        return;
+    }
+
+    for (int i = 0; i < (int)dimensions.size(); i++) {
+        const Dimension& dim = dimensions[i];
+        int tileSize = 32; // Size of each tile in pixels
+
+        for (int y = 0; y < dim.getHeight(); y++) {
+            for (int x = 0; x < dim.getWidth(); x++) {
+                uint8_t tileID = dim.tiles[y][x];
+                Color tileColor = GetColorFromIndex(tileID);
+
+                // Calculate screen position
+                int screenX = x * tileSize;
+                int screenY = y * tileSize;
+
+                // Draw the tile as a filled rectangle
+                DrawRectangle(screenX, screenY, tileSize, tileSize, tileColor);
+                DrawText(std::to_string(tileID).c_str(), screenX + tileSize / 4, screenY + tileSize / 4, 10, BLACK);
+            }
+        }
+    }
+}

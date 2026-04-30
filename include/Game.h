@@ -1,10 +1,11 @@
 #pragma once
 
 #include "raylib.h"
+#include "include/HandleDimensions.h"
 
-class Game {
+struct Game {
 
-    void RunGame();
+    void run();
 
 private:
     void Input(float dt);
@@ -13,4 +14,6 @@ private:
 
     const int SCREEN_WIDTH = 1280;
     const int SCREEN_HEIGHT = 720;
+
+    HandleDimensions handleDimensions;
 };

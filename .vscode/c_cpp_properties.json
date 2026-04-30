@@ -3,10 +3,11 @@
         {
             "name": "Win32",
             "includePath": [
-                "${workspaceFolder}",
+                "C:/raylib/raylib/src/**",
+                "C:/raylib/raylib/src/external/**",
                 "${workspaceFolder}/**",
-                "${workspaceFolder}/include",
-                "${workspaceFolder}/src"
+                "${workspaceFolder}/include/**",
+                "${workspaceFolder}/src/**"
             ],
             "defines": [
                 "_DEBUG",
@@ -24,7 +25,9 @@
             "name": "Mac",
             "includePath": [
                 "<path_to_raylib>/src/**",
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/include/**",
+                "${workspaceFolder}/src/**"
             ],
             "defines": [
                 "_DEBUG",
@@ -45,7 +48,9 @@
             "name": "Linux",
             "includePath": [
                 "<path_to_raylib>/src/**",
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/include/**",
+                "${workspaceFolder}/src/**"
             ],
             "defines": [
                 "_DEBUG",
@@ -58,7 +63,6 @@
             "cStandard": "c11",
             "cppStandard": "c++14",
             "intelliSenseMode": "clang-x64"
-
         }
     ],
     "version": 4

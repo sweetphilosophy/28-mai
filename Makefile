@@ -24,7 +24,7 @@
 .PHONY: all clean
 
 # Define required raylib variables
-PROJECT_NAME       ?= game
+PROJECT_NAME       ?= bin/game
 RAYLIB_VERSION     ?= 5.1-dev
 RAYLIB_PATH        ?= ..\..
 
@@ -253,7 +253,7 @@ endif
 
 # Define include paths for required headers
 # NOTE: Several external required libraries (stb and others)
-INCLUDE_PATHS = -I. -I$(RAYLIB_PATH)/src -I$(RAYLIB_PATH)/src/external
+INCLUDE_PATHS = -I. -Iinclude -I$(RAYLIB_PATH)/src -I$(RAYLIB_PATH)/src/external
 
 # Define additional directories containing required header files
 ifeq ($(PLATFORM),PLATFORM_RPI)
@@ -275,7 +275,7 @@ ifeq ($(PLATFORM),PLATFORM_DESKTOP)
 endif
 
 # Define library paths containing required libs.
-LDFLAGS = -L. -L$(RAYLIB_RELEASE_PATH) -L$(RAYLIB_PATH)/src
+LDFLAGS = -L. -Llib -L$(RAYLIB_RELEASE_PATH) -L$(RAYLIB_PATH)/src
 
 ifeq ($(PLATFORM),PLATFORM_DESKTOP)
     ifeq ($(PLATFORM_OS),BSD)
@@ -354,6 +354,11 @@ rwildcard=$(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2) $(filter $(subst 
 # Define all source files required
 SRC_DIR = src
 OBJ_DIR = obj
+# Find all .cpp files in src/
+SRC = $(wildcard $(SRC_DIR)/*.cpp)
+
+# Map those to .o files inside the lib/ folder
+OBJS = $(SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 
 # Define all object files from source files
 SRC = $(call rwildcard, ./, *.c, *.h)
@@ -376,12 +381,12 @@ all:
 
 # Project target defined by PROJECT_NAME
 $(PROJECT_NAME): $(OBJS)
-	$(CC) -o $(PROJECT_NAME)$(EXT) $(OBJS) $(CFLAGS) $(INCLUDE_PATHS) $(LDFLAGS) $(LDLIBS) -D$(PLATFORM)
+	$(CC) -o $@ $(OBJS) $(CFLAGS) $(INCLUDE_PATHS) $(LDFLAGS) $(LDLIBS) -D$(PLATFORM)
 
 # Compile source files
 # NOTE: This pattern will compile every module defined on $(OBJS)
-#%.o: %.c
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+#%.o: %.cpp
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	$(CC) -c $< -o $@ $(CFLAGS) $(INCLUDE_PATHS) -D$(PLATFORM)
 
 # Clean everything

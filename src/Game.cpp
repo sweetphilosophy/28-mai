@@ -1,10 +1,13 @@
 #include "Game.h"
 
+Game::Game() {
+
+    dimensionManager.dimensions.emplace_back("assets\\misc\\Dimension0.png", true);
+}
+
 void Game::run() {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Raylib Starter Template");
-    SetTargetFPS(60);
-
-    handleDimensions.dimensions.emplace_back("assets\\misc\\Dimension0.png");
+    SetTargetFPS(targetFPS);
 
     while (!WindowShouldClose())
     {
@@ -13,22 +16,25 @@ void Game::run() {
         Update(dt);
         Draw();
     }
+
     CloseWindow();
 }
 
 void Game::Input(float dt) {
-    // Handle user input here
+    objectManager.Input(dimensionManager);
 }
 
 void Game::Update(float dt) {
-    // Update game logic here
+    objectManager.Update(dimensionManager, dt);
+    dimensionManager.Update();
 }
 
 void Game::Draw() {
     BeginDrawing();
     ClearBackground(RAYWHITE);
 
-    handleDimensions.Draw_MapDebug();
+    dimensionManager.Draw_MapDebug();
+    objectManager.Draw();
 
     EndDrawing();
 }

@@ -1,19 +1,21 @@
 #pragma once
 
 #include "raylib.h"
-#include "include/HandleDimensions.h"
+#include "DimensionManager.h"
+#include "ObjectManager.h"
+#include "Config.h"
 
-struct Game {
-
-    void run();
-
+class Game {
 private:
+
     void Input(float dt);
     void Update(float dt);
     void Draw();
 
-    const int SCREEN_WIDTH = 1280;
-    const int SCREEN_HEIGHT = 720;
+    DimensionManager dimensionManager;
+    ObjectManager objectManager;
 
-    HandleDimensions handleDimensions;
+public:
+    void run();
+    Game();
 };

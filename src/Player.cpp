@@ -10,16 +10,30 @@ std::pair<int, int> Player::ToIndex(Vector2 mousePos) {
 }
 
 void Player::HandleMovementInput(const Dimension& currentDimension) {
-    movementUnitVector.x = 0;
-
-    if (IsKeyDown(KEY_D)) {
-        movementUnitVector.x = 1;
-    }
-    if (IsKeyDown(KEY_A)) {
-        movementUnitVector.x = -1;
-    }
+    
     if (IsKeyDown(KEY_SPACE) && !isJumping) {
         Jump();
+    }
+
+    bool rightPressed = IsKeyDown(KEY_D);
+    bool leftPressed = IsKeyDown(KEY_A);
+
+    static bool wasRightPressed = false;
+
+    if (!rightPressed && !leftPressed) { // no horizontal movement
+        movementUnitVector.x = 0.0f;
+    }
+    if (leftPressed && !rightPressed) { // left only
+        movementUnitVector.x = -1.0f;
+        wasRightPressed = false;
+    }
+    if (rightPressed && !leftPressed) { // right only
+        movementUnitVector.x = 1.0f;
+        wasRightPressed = true;
+    }
+    // if both are pressed, we override the direction with the new press
+    if (rightPressed && leftPressed) {
+        movementUnitVector.x = wasRightPressed ? -1.0f : 1.0f; // invert the previous direction
     }
 }
 

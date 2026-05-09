@@ -18,9 +18,7 @@ bool Entity::IsSolidTile(const Dimension& currentDimension, int tileX, int tileY
         return false;
     }
 
-    if (tileX < 0 || tileX >= (int)currentDimension.tiles[tileY].size()) {
-        return false;
-    }
+    tileX = currentDimension.WrapX(tileX);
 
     return currentDimension.tiles[tileY][tileX] != TileIndex::Air;
 }

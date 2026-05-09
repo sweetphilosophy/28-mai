@@ -1,7 +1,9 @@
 #include "DimensionManager.h"
 #include <unordered_map>
+#include <cmath>
 #include "raylib.h"
 #include "Config.h"
+
 
 // fill in with preffered colors
 // color code, index
@@ -138,6 +140,19 @@ int Dimension::getHeight() const {
     return tiles.size();
 }
 
+int Dimension::WrapX(int x) const {
+    int width = getWidth();
+    if (width <= 0) {
+        return x;
+    }
+
+    int wrapped = x % width;
+    if (wrapped < 0) {
+        wrapped += width;
+    }
+    return wrapped;
+}
+
 Dimension::Dimension(std::string filename, bool isActive) : isActive(isActive) {
     LoadFromFile(filename);
 }
@@ -174,23 +189,18 @@ void Dimension::Draw() const {
     // For now, tile drawing is handled in DimensionManager::Draw_MapDebug()
 }
 
-void Dimension::Draw_MapDebug() const {
-    // quick and dirty: special debug button to draw the tile IDs for testing
+void Dimension::Draw_MapDebug(const CameraManager& cameraManager) const {
+    const Camera2D& camera = cameraManager.GetCamera();
+    int screenW = GetScreenWidth();
+    float zoom = (camera.zoom <= 0.0f) ? 1.0f : camera.zoom;
+    int mapWidthPx = getWidth() * tileWidth;
 
-    static bool showTileIDs = false;
-    if (IsKeyPressed(KEY_TAB)) {
-        showTileIDs = !showTileIDs;
-    }
+    float halfViewW = (screenW * 0.5f) / zoom;
+    int centerCopy = (int)std::floor(camera.target.x / mapWidthPx);
+    int copiesEachSide = (int)std::ceil(halfViewW / mapWidthPx) + 1;
 
-    for (int y = 0; y < getHeight(); y++) {
-        for (int x = 0; x < getWidth(); x++) {
-            int tileID = tiles[y][x];
-            Color tileColor = GetColorFromIndex(tileID);
-            DrawRectangle(x * tileWidth, y * tileHeight, tileWidth, tileHeight, tileColor);
-            if (showTileIDs) {
-                DrawText(TextFormat("%i", tileID), x * tileWidth + 10, y * tileHeight + 10, 10, BLACK);
-            }
-        }
+    for (int copy = centerCopy - copiesEachSide; copy <= centerCopy + copiesEachSide; ++copy) {
+        DrawIndividualMap(cameraManager, (float)copy * mapWidthPx);
     }
 }
 
@@ -214,6 +224,26 @@ Dimension& DimensionManager::GetCurrentDimension() {
     return dimensions[currentDimensionIndex];
 }
 
+void Dimension::DrawIndividualMap(const CameraManager& cameraManager, float offsetX) const {
+    // quick and dirty: special debug button to draw the tile IDs for testing
+
+    static bool showTileIDs = false;
+    if (IsKeyPressed(KEY_TAB)) {
+        showTileIDs = !showTileIDs;
+    }
+
+    for (int y = 0; y < getHeight(); y++) {
+        for (int x = 0; x < getWidth(); x++) {
+            int tileID = tiles[y][x];
+            Color tileColor = GetColorFromIndex(tileID);
+            DrawRectangle((int)(offsetX + x * tileWidth), y * tileHeight, tileWidth, tileHeight, tileColor);
+            if (showTileIDs) {
+                DrawText(TextFormat("%i", tileID), (int)(offsetX + x * tileWidth + 10), y * tileHeight + 10, 10, BLACK);
+            }
+        }
+    }
+}
+
 void DimensionManager::Update() {
     // Placeholder for any future updates (e.g., animations, dynamic changes)
     for (Dimension& dim : dimensions) {
@@ -231,7 +261,7 @@ void DimensionManager::Draw() const {
     // pass through dimension map vector, see id, place texture for that id at the right place
 }
 
-void DimensionManager::Draw_MapDebug() const {
+void DimensionManager::Draw_MapDebug(const CameraManager& cameraManager) const {
 
     if (dimensions.empty()) {
         // TraceLog(LOG_WARNING, "No dimensions to draw.");
@@ -249,6 +279,10 @@ void DimensionManager::Draw_MapDebug() const {
             continue; // Skip inactive dimensions
         }
 
-        dim.Draw_MapDebug();
+        if (dim.tiles.empty() || dim.tiles[0].empty()) {
+            continue;
+        }
+
+        dim.Draw_MapDebug(cameraManager);
     }
-}
+} 

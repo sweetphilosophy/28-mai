@@ -41,6 +41,7 @@ void Player::HandleMouseInput(Dimension& currentDimension, CameraManager& camera
     Vector2 mousePos = GetMousePosition();
     mousePos = cameraManager.ScreenToWorld(mousePos);
     std::pair<int, int> tileIndex = ToIndex(mousePos);
+    tileIndex.first = currentDimension.WrapX(tileIndex.first);
 
     if (IsKeyPressed(KEY_C)) {
         creativeMode = !creativeMode;

@@ -44,7 +44,7 @@ void Game::Draw() {
     BeginMode2D(cameraManager.GetCamera());
     // draw things that exist in the world regardless of camera view
 
-    dimensionManager.Draw_MapDebug();
+    dimensionManager.Draw_MapDebug(cameraManager);
     objectManager.Draw(dimensionManager);
 
     EndMode2D();

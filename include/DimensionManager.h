@@ -4,6 +4,7 @@
 #include <string>
 #include <cstdint>
 #include <queue>
+#include "CameraManager.h"
 
 struct Action {
     std::pair<int, int> position;
@@ -21,11 +22,13 @@ public:
     void SaveToFile(std::string filename) const;
     int getWidth() const;
     int getHeight() const;
+    int WrapX(int x) const;
 
     void Update();
+    // draws seemplesly looping map
     void Draw() const;
-    // draws the initial png colors only
-    void Draw_MapDebug() const;
+    // draws in a seemless loop, the initial png colors only
+    void Draw_MapDebug(const CameraManager& cameraManager) const;
     
     const char* GetNameFromID(int tileID) const;
 
@@ -38,6 +41,7 @@ public:
 private:
     bool inBounds(int x, int y) const;
     bool inBounds(std::pair<int, int> pos) const;
+    void DrawIndividualMap(const CameraManager& cameraManager, float offsetX = 0.0f) const;
 };
 
 struct DimensionManager {
@@ -48,7 +52,7 @@ public:
     void Update();
     void Draw() const;
     // draws the initial png colors only
-    void Draw_MapDebug() const;
+    void Draw_MapDebug(const CameraManager& cameraManager) const;
 
     const Dimension& GetCurrentDimension() const;
     Dimension& GetCurrentDimension();

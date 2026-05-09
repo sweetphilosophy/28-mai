@@ -1,4 +1,5 @@
 #include "CameraManager.h"
+#include "DimensionManager.h"
 #include <algorithm>
 #include <cmath>
 

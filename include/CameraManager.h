@@ -1,7 +1,8 @@
 #pragma once
 #include "raylib.h"
-#include "DimensionManager.h"
 #include "Config.h"
+
+struct Dimension; // Forward declaration to avoid circular dependency
 
 class CameraManager {
 public:

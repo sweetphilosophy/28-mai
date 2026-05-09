@@ -14,25 +14,26 @@ Game::Game() {
 void Game::run() {
 
     InitGameWindow();
+    InitGameCamera();
 
     while (!WindowShouldClose())
     {
         float dt = GetFrameTime();
-        Input(dt);
-        Update(dt);
+        Input(dt, cameraManager);
+        Update(dt, cameraManager);
         Draw();
     }
 
     CloseWindow();
 }
 
-void Game::Input(float dt) {
+void Game::Input(float dt, CameraManager& cameraManager) {
     HandleFullscreenToggle();
-    objectManager.Input(dimensionManager);
+    objectManager.Input(dimensionManager, cameraManager);
 }
 
-void Game::Update(float dt) {
-    objectManager.Update(dimensionManager, dt);
+void Game::Update(float dt, CameraManager& cameraManager) {
+    objectManager.Update(dimensionManager, cameraManager, dt);
     dimensionManager.Update();
 }
 
@@ -40,8 +41,18 @@ void Game::Draw() {
     BeginDrawing();
     ClearBackground(RAYWHITE);
 
+    BeginMode2D(cameraManager.GetCamera());
+    // draw things that exist in the world regardless of camera view
+
     dimensionManager.Draw_MapDebug();
     objectManager.Draw(dimensionManager);
+
+    EndMode2D();
+
+    objectManager.player.DrawHandling_CreativeModeUI(dimensionManager);
+
+    // Draw UI elements here if needed
+    // aka things that exist directly in screen space
 
     EndDrawing();
 }
@@ -67,6 +78,13 @@ void Game::InitGameWindow() {
         int posY = std::max(0, (monitorH - h) / 2);
         SetWindowPosition(posX, posY);
     }
+
+}
+
+void Game::InitGameCamera() {
+    cameraManager.Init(GetScreenWidth(), GetScreenHeight());
+    cameraManager.RebuildVerticalLimits(dimensionManager.GetCurrentDimension());
+    cameraManager.UpdateFollow(objectManager.player.hitbox, dimensionManager.GetCurrentDimension());
 }
 
 void Game::HandleFullscreenToggle() {
@@ -93,5 +111,8 @@ void Game::HandleFullscreenToggle() {
             int posY = std::max(0, (mH - h) / 2);
             SetWindowPosition(posX, posY);
         }
+        // Update camera viewport and recompute limits after any fullscreen toggle
+        cameraManager.SetViewport(GetScreenWidth(), GetScreenHeight());
+        cameraManager.RebuildVerticalLimits(dimensionManager.GetCurrentDimension());
     }
 }

@@ -37,8 +37,9 @@ void Player::HandleMovementInput(const Dimension& currentDimension) {
     }
 }
 
-void Player::HandleMouseInput(Dimension& currentDimension) {
+void Player::HandleMouseInput(Dimension& currentDimension, CameraManager& cameraManager) {
     Vector2 mousePos = GetMousePosition();
+    mousePos = cameraManager.ScreenToWorld(mousePos);
     std::pair<int, int> tileIndex = ToIndex(mousePos);
 
     if (IsKeyPressed(KEY_C)) {
@@ -78,16 +79,21 @@ void Player::HandleSaveMapInput(Dimension& currentDimension) {
     }
 }
 
-void Player::Input(DimensionManager& dimManager) {
+void Player::Input(DimensionManager& dimManager, CameraManager& cameraManager) {
     Dimension& currentDimension = dimManager.GetCurrentDimension();
     HandleMovementInput(currentDimension);
-    HandleMouseInput(currentDimension);
+    HandleMouseInput(currentDimension, cameraManager);
     HandleSaveMapInput(currentDimension);
 }
 
 void Player::DrawDebug(const DimensionManager& dimManager) const {
-    const Dimension& currentDimension = dimManager.GetCurrentDimension();
+    // Draw rectangle outline for debugging using raylib function
     DrawRectangleLinesEx(hitbox, 2, RED);
+}
+
+void Player::DrawHandling_CreativeModeUI(const DimensionManager& dimManager) const {
+    const Dimension& currentDimension = dimManager.GetCurrentDimension();
+    
     if (creativeMode) {
         DrawText(TextFormat("Current Tile ID: %s", currentDimension.GetNameFromID(currentTilePlaceID)), 10, 10, 20, BLACK);
         if (!lastSavedMapName.empty()) {

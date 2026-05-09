@@ -11,12 +11,13 @@ ObjectManager::ObjectManager() {
     player.id = EntityID::PLAYER;
 }
 
-void ObjectManager::Input(DimensionManager& dimManager) {
-    player.Input(dimManager);
+void ObjectManager::Input(DimensionManager& dimManager, CameraManager& cameraManager) {
+    player.Input(dimManager, cameraManager);
 }
 
-void ObjectManager::Update(DimensionManager& dimManager, float dt) {
+void ObjectManager::Update(DimensionManager& dimManager, CameraManager& cameraManager, float dt) {
     player.Update(dimManager.GetCurrentDimension(), dt);
+    cameraManager.UpdateFollow(player.hitbox, dimManager.GetCurrentDimension());
 }
 
 void ObjectManager::Draw(DimensionManager& dimManager) const {

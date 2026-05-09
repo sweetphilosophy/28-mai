@@ -8,8 +8,8 @@ struct ObjectManager {
 
     ObjectManager();
 
-    void Input(DimensionManager& dimManager);
-    void Update(DimensionManager& dimManager, float dt);
+    void Input(DimensionManager& dimManager, CameraManager& cameraManager);
+    void Update(DimensionManager& dimManager, CameraManager& cameraManager, float dt);
     void Draw(DimensionManager& dimManager) const;
     void DrawDebug(const DimensionManager& dimManager) const;
 

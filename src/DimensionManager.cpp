@@ -9,7 +9,7 @@ static const std::unordered_map<uint32_t, int> colorCodeToIndex = {
     {0xFFFFFF, TileIndex::Air},
     {0x964B00, TileIndex::Dirt},
     {0x00FF00, TileIndex::Grass},
-    {0x8B4513, TileIndex::Wood},
+    {0x422109, TileIndex::Wood},
     {0x228B22, TileIndex::LeafBlock},
     {0x808080, TileIndex::Stone},
     {0xF5DEB3, TileIndex::Planks},
@@ -22,7 +22,7 @@ Color GetColorFromIndex(int index) {
         case TileIndex::Air:          return GetColor(0xFFFFFFFF); // White for air (transparent)
         case TileIndex::Dirt:         return GetColor(0x964B00FF); // Raylib GetColor handles 0xRRGGBBAA
         case TileIndex::Grass:        return GetColor(0x00FF00FF);
-        case TileIndex::Wood:         return GetColor(0x8B4513FF);
+        case TileIndex::Wood:         return GetColor(0x422109FF);
         case TileIndex::LeafBlock:    return GetColor(0x228B22FF);
         case TileIndex::Stone:        return GetColor(0x808080FF);
         case TileIndex::Planks:       return GetColor(0xF5DEB3FF);

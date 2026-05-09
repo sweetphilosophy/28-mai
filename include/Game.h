@@ -12,6 +12,9 @@ private:
     void Update(float dt);
     void Draw();
 
+    void InitGameWindow();
+    void HandleFullscreenToggle();
+
     DimensionManager dimensionManager;
     ObjectManager objectManager;
 

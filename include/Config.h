@@ -13,6 +13,11 @@ constexpr float jumpVelocity = -600.0f; // Initial jump velocity (negative for u
 
 constexpr int updatesPerFrame = 5; // Number of tile updates to process per frame
 
+constexpr bool isActiveDimension = true;
+constexpr bool isInactiveDimension = false;
+
+constexpr const char* saveDirectory = "assets\\misc";
+
 namespace EntityID {
     enum : int {
         PLAYER,

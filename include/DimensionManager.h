@@ -14,6 +14,9 @@ struct Dimension {
 public:
     Dimension(std::string filename, bool isActive = false);
     ~Dimension() = default;
+
+    // filename should include extension, e.g. ".png"
+    // filename should be a path relative to the executable, e.g. "assets\\maps\\my_map.png"
     void LoadFromFile(std::string filename);
     void SaveToFile(std::string filename) const;
     int getWidth() const;
@@ -24,6 +27,8 @@ public:
     // draws the initial png colors only
     void Draw_MapDebug() const;
     
+    const char* GetNameFromID(int tileID) const;
+
     std::queue<Action> updateQueue; // Queue for pending updates (e.g., tile changes)
     std::vector<std::vector<int>> tiles;
 

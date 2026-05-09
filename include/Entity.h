@@ -15,7 +15,7 @@ public:
     
     virtual void Update(Dimension& currentDimension, float deltaTime);
     virtual void Draw() const;
-    virtual void DrawDebug() const;
+    virtual void DrawDebug(const DimensionManager& dimManager) const;
     
 protected:
     bool CollisionCheck(const Entity& other) const;

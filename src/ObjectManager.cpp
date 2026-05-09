@@ -19,10 +19,10 @@ void ObjectManager::Update(DimensionManager& dimManager, float dt) {
     player.Update(dimManager.GetCurrentDimension(), dt);
 }
 
-void ObjectManager::Draw() {
-    player.DrawDebug();
+void ObjectManager::Draw(DimensionManager& dimManager) const {
+    player.DrawDebug(dimManager);
 }
 
-void ObjectManager::DrawDebug() const {
-    player.DrawDebug();
+void ObjectManager::DrawDebug(const DimensionManager& dimManager) const {
+    player.DrawDebug(dimManager);
 }

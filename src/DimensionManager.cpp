@@ -32,12 +32,27 @@ Color GetColorFromIndex(int index) {
     }
 }
 
+const char* Dimension::GetNameFromID(int tileID) const {
+    switch (tileID) {
+        case TileIndex::Air:          return "Air";
+        case TileIndex::Dirt:         return "Dirt";
+        case TileIndex::Grass:        return "Grass";
+        case TileIndex::Wood:         return "Wood";
+        case TileIndex::LeafBlock:    return "LeafBlock";
+        case TileIndex::Stone:        return "Stone";
+        case TileIndex::Planks:       return "Planks";
+        case TileIndex::Bedrock:      return "Bedrock";
+        case TileIndex::BlueObsidian: return "BlueObsidian";
+        default:                      return "Unknown";
+    }
+}
+
 void Dimension::LoadFromFile(std::string filename) {
     // 1. Load the image into CPU memory
     Image mapImage = LoadImage(filename.c_str());
     
     if (mapImage.data == nullptr) {
-        TraceLog(LOG_ERROR, "Failed to load map image: %s", filename.c_str());
+        // TraceLog(LOG_ERROR, "Failed to load map image: %s", filename.c_str());
         return;
     }
 
@@ -69,13 +84,15 @@ void Dimension::LoadFromFile(std::string filename) {
     // 5. Unload image from CPU memory (very important!)
     UnloadImage(mapImage);
     
-    TraceLog(LOG_INFO, "Dimension loaded: %i x %i tiles", mapImage.width, mapImage.height);
+    // TraceLog(LOG_INFO, "Dimension loaded: %i x %i tiles", mapImage.width, mapImage.height);
 }
 
+// filename should include extension, e.g. "my_map.png". 
+// the output folder is the same as the executable
 void Dimension::SaveToFile(std::string filename) const {
     // 1. Check if the vector is empty to avoid crashes
     if (tiles.empty() || tiles[0].empty()) {
-        TraceLog(LOG_WARNING, "Cannot save dimension: tiles vector is empty.");
+        // TraceLog(LOG_WARNING, "Cannot save dimension: tiles vector is empty.");
         return;
     }
 
@@ -104,9 +121,9 @@ void Dimension::SaveToFile(std::string filename) const {
     // 4. Export the image to a file
     // Raylib supports .png, .bmp, .tga, .jpg automatically based on extension
     if (ExportImage(mapImage, filename.c_str())) {
-        TraceLog(LOG_INFO, "Dimension successfully saved to: %s", filename.c_str());
+        // TraceLog(LOG_INFO, "Dimension successfully saved to: %s", filename.c_str());
     } else {
-        TraceLog(LOG_ERROR, "Failed to export dimension image: %s", filename.c_str());
+        // TraceLog(LOG_ERROR, "Failed to export dimension image: %s", filename.c_str());
     }
 
     // 5. Clean up the temporary image data

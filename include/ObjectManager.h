@@ -10,8 +10,8 @@ struct ObjectManager {
 
     void Input(DimensionManager& dimManager);
     void Update(DimensionManager& dimManager, float dt);
-    void Draw();
-    void DrawDebug() const;
+    void Draw(DimensionManager& dimManager) const;
+    void DrawDebug(const DimensionManager& dimManager) const;
 
     Player player;
 };

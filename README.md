@@ -610,6 +610,3 @@ git status
 - add a player and enemies
 - create score and timer systems
 - experiment with collisions and sounds
-
-
-test mircea

@@ -31,6 +31,7 @@ void Game::run() {
 void Game::Input(float dt, CameraManager& cameraManager) {
     HandleFullscreenToggle();
     objectManager.Input(dimensionManager, cameraManager);
+    inventory.HandleInput();
 }
 
 void Game::Update(float dt, CameraManager& cameraManager) {
@@ -50,8 +51,9 @@ void Game::Draw() {
 
     EndMode2D();
 
+    
     objectManager.player.DrawHandling_CreativeModeUI(dimensionManager);
-
+    inventory.Draw();
     // Draw UI elements here if needed
     // aka things that exist directly in screen space
 

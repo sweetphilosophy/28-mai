@@ -6,6 +6,7 @@
 #include "Config.h"
 #include "CameraManager.h"
 #include "TextureManager.h"
+#include "inventory.h"
 
 class Game {
 private:
@@ -22,7 +23,7 @@ private:
     ObjectManager objectManager;
     CameraManager cameraManager;
     TextureManager textureManager;
-    
+    Inventory inventory;
 public:
     void run();
     Game();

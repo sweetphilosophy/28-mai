@@ -1,24 +1,27 @@
-# Raylib Starter Project
+# C++ Advanced End Of Year Game Project
 
-This is a simple C++ raylib starter project prepared for VS Code.
+This is a C++ raylib project prepared for the end of the year of the C++ Advanced course
 
-It already includes:
+The project currently contains:
 
-- `main.cpp` with a basic game loop
-- a `Makefile` for building the project
-- `.vscode` configuration files for build and run tasks
-- a simple starter window that shows text on the screen
-
-This project is a good starting point for CoderDojo exercises, experiments, and small games.
+- a `Game` class that controls the main game loop
+- a player with movement, jumping, gravity, and collision
+- a camera that follows the player
+- a map loaded from a PNG image
+- a simple creative mode for editing tiles
 
 ## Project Structure
 
-- `main.cpp` - the main source file
-- `main.exe` - the compiled Windows executable
+- `main.cpp` - the small entry point that creates and runs the game
+- `include/` - header files with class and function declarations
+- `src/` - C++ implementation files
+- `assets/` - images and other game assets
+- `assets/misc/Dimension0.png` - the current map image
 - `Makefile` - build instructions
 - `.vscode/tasks.json` - build tasks for VS Code
 - `.vscode/launch.json` - debug and run configurations for VS Code
-- `resources/` - place for game assets and supporting files
+- `bin/` - compiled program output
+- `obj/` - temporary build files
 
 ## How To Run The Project In VS Code
 
@@ -51,18 +54,272 @@ In VS Code:
 - Press `F5`
 - Choose `Debug` or `Run`
 
-The project will open a window with the starter message.
+The project will open a raylib window with the current tile map and player.
 
-## How The Starter Code Works
+## How The Code Works So Far
 
-The code in `main.cpp` is organized like this:
+This section explains the code in a simple order.
 
-- `Input(float dt)` for keyboard or mouse input
-- `Update(float dt)` for game logic
-- `Draw()` for drawing everything on the screen
-- `main()` for creating the window and running the loop
+### 1. The Program Starts In `main.cpp`
 
-This is a clean structure for building a simple game step by step.
+`main.cpp` is intentionally very small:
+
+```cpp
+Game game;
+game.run();
+```
+
+It creates one `Game` object, then asks it to run.
+
+That means most of the project starts from the `Game` class.
+
+### 2. `Game` Controls The Main Loop
+
+The main game code is split between:
+
+- `include/Game.h`
+- `src/Game.cpp`
+
+`Game::run()` does three big things:
+
+1. Creates the game window.
+2. Creates the camera.
+3. Repeats the game loop until the player closes the window.
+
+The loop has this order every frame:
+
+```cpp
+Input(dt, cameraManager);
+Update(dt, cameraManager);
+Draw();
+```
+
+Think of one frame like this:
+
+- `Input` asks: what did the player press?
+- `Update` asks: what should change?
+- `Draw` asks: what should appear on screen?
+
+This pattern is very common in games.
+
+### 3. `Config.h` Stores Shared Settings
+
+`include/Config.h` contains values used in many files.
+
+Examples:
+
+- tile size: `tileWidth` and `tileHeight`
+- screen size: `SCREEN_WIDTH` and `SCREEN_HEIGHT`
+- physics values: `gravity` and `jumpVelocity`
+- tile IDs: `Air`, `Dirt`, `Grass`, `Stone`, and others
+
+If you want to change basic game rules, this is often a good file to check first.
+
+### 4. The Map Is Called A `Dimension`
+
+The map code is in:
+
+- `include/DimensionManager.h`
+- `src/DimensionManager.cpp`
+
+A `Dimension` is one tile map.
+
+When the game starts, this file is loaded:
+
+```text
+assets/misc/Dimension0.png
+```
+
+Each pixel in the PNG becomes one tile in the game.
+
+For example:
+
+- white pixel means `Air`
+- brown pixel means `Dirt`
+- green pixel means `Grass`
+- gray pixel means `Stone`
+
+The map is stored as a 2D vector:
+
+```cpp
+tiles[y][x]
+```
+
+That means:
+
+- `y` is the row
+- `x` is the column
+
+The map can also be saved back into a PNG file.
+
+### 5. `DimensionManager` Chooses The Active Map
+
+`DimensionManager` stores all dimensions in a list.
+
+Right now, the game mainly uses one active dimension.
+
+The active dimension is the one that gets:
+
+- updated
+- drawn
+- checked for player collision
+
+Later, this system could be used for multiple worlds, levels, or dimensions.
+
+### 6. `ObjectManager` Owns Game Objects
+
+The object code is in:
+
+- `include/ObjectManager.h`
+- `src/ObjectManager.cpp`
+
+Right now, `ObjectManager` owns the player.
+
+It sets the player's starting values:
+
+- health
+- damage
+- speed
+- starting position
+- hitbox size
+
+During the game loop, `ObjectManager` sends input and update calls to the player.
+
+### 7. Entities Are Things That Can Exist In The World
+
+The entity code is in:
+
+- `include/Entity.h`
+- `src/Entity.cpp`
+
+`Entity` is a base class.
+
+It stores common data such as:
+
+- health
+- speed
+- movement direction
+- hitbox
+- ID
+
+It also has helper functions for collision with tiles.
+
+The important idea is:
+
+> Shared behavior goes in `Entity`, and more specific behavior goes in child classes.
+
+### 8. `GroundEntity` Adds Gravity And Jumping
+
+The ground entity code is in:
+
+- `include/GroundEntity.h`
+- `src/GroundEntity.cpp`
+
+`GroundEntity` inherits from `Entity`.
+
+It adds:
+
+- gravity
+- vertical velocity
+- jumping
+- landing on tiles
+- bumping into walls or ceilings
+
+The player uses this class because the player walks and jumps on the ground.
+
+### 9. `Player` Handles Player Controls
+
+The player code is in:
+
+- `include/Player.h`
+- `src/Player.cpp`
+
+The player currently supports:
+
+- `A` to move left
+- `D` to move right
+- `Space` to jump
+- `C` to toggle creative mode
+- mouse wheel to choose a tile in creative mode
+- left click to remove a tile in creative mode
+- right click to place the selected tile in creative mode
+- `Ctrl+S` to save the current map
+
+The player does not directly change a tile immediately.
+
+Instead, it adds an `Action` to the dimension's `updateQueue`.
+
+Then the dimension processes a few queued updates each frame.
+
+### 10. `CameraManager` Follows The Player
+
+The camera code is in:
+
+- `include/CameraManager.h`
+- `src/CameraManager.cpp`
+
+The camera follows the center of the player's hitbox.
+
+It also:
+
+- keeps the view centered on the screen
+- limits how far up or down the camera can move
+- converts mouse screen position into world position
+
+That last part is important for creative mode, because the mouse clicks on the screen but tiles exist in the game world.
+
+### 11. Drawing Uses World Space And Screen Space
+
+In `Game::Draw()`, there are two drawing areas.
+
+Inside `BeginMode2D(cameraManager.GetCamera())`:
+
+- draw the map
+- draw the player
+- draw things that exist in the game world
+
+After `EndMode2D()`:
+
+- draw UI text
+- draw things that stay fixed on the screen
+
+The creative mode text is screen UI, so it is drawn after `EndMode2D()`.
+
+### 12. Useful Debug And Test Controls
+
+- `F11` toggles fullscreen.
+- `Tab` toggles tile ID text on the map.
+- `C` toggles creative mode.
+- `Ctrl+S` saves the edited map.
+
+These controls are helpful while building and testing the game.
+
+## Good First Files To Read
+
+If you are new to the project, this reading order is recommended:
+
+1. `main.cpp`
+2. `include/Game.h`
+3. `src/Game.cpp`
+4. `include/Config.h`
+5. `include/Player.h`
+6. `src/Player.cpp`
+7. `include/DimensionManager.h`
+8. `src/DimensionManager.cpp`
+
+Start with the big flow first, then read the details.
+
+## Ideas To Try
+
+Good first changes could be:
+
+- change the player's speed
+- change jump height
+- add a new tile color and tile ID
+- change the player's starting position
+- draw the player with a filled rectangle instead of only debug lines
+- add a new key for a simple action
+- add another map image
 
 ## Simple Git Tutorial
 

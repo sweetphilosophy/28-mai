@@ -43,6 +43,8 @@ void Player::HandleMouseInput(Dimension& currentDimension, CameraManager& camera
     std::pair<int, int> tileIndex = ToIndex(mousePos);
     tileIndex.first = currentDimension.WrapX(tileIndex.first);
 
+    bool mousePointsToPlayer = CheckCollisionPointRec(mousePos, hitbox);
+
     if (IsKeyPressed(KEY_C)) {
         creativeMode = !creativeMode;
     }
@@ -58,13 +60,13 @@ void Player::HandleMouseInput(Dimension& currentDimension, CameraManager& camera
         currentTilePlaceID = (currentTilePlaceID - 1 + TileIndex::TileCount) % TileIndex::TileCount; // Cycle backwards through tile IDs
     }
 
-    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && !mousePointsToPlayer) {
         // Enqueue an action to change the tile at tileIndex to a new tile ID (e.g., Air)
         Action action = {tileIndex, TileIndex::Air};
         currentDimension.updateQueue.push(action);
     }
 
-    if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON)) {
+    if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON) && !mousePointsToPlayer) {
         // Enqueue an action to change the tile at tileIndex to a new tile ID (e.g., Dirt)
         Action action = {tileIndex, currentTilePlaceID};
         currentDimension.updateQueue.push(action);

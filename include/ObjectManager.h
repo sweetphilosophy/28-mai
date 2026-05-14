@@ -2,7 +2,10 @@
 
 #include "raylib.h"
 #include "Player.h"
+#include "Bee.h"
 #include "DimensionManager.h"
+#include <vector>
+#include <memory>
 
 struct ObjectManager {
 
@@ -14,4 +17,5 @@ struct ObjectManager {
     void DrawDebug(const DimensionManager& dimManager) const;
 
     Player player;
+    std::vector<std::unique_ptr<Entity>> entities;
 };

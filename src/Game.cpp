@@ -54,6 +54,16 @@ void Game::Draw() {
     
     objectManager.player.DrawHandling_CreativeModeUI(dimensionManager);
     inventory.Draw();
+    // Draw HP bar
+    int barWidth = 200;
+    int barHeight = 15;
+    int barX = GetScreenWidth() - barWidth - 20;
+    int barY = 20;
+    DrawRectangle(barX, barY, barWidth, barHeight, RED); // background
+    float healthRatio = (float)objectManager.player.currentHealth / objectManager.player.maxHealth;
+    DrawRectangle(barX, barY, (int)(barWidth * healthRatio), barHeight, GREEN); // fill
+    DrawRectangleLines(barX, barY, barWidth, barHeight, BLACK); // border
+    DrawText(TextFormat("HP: %d/%d", objectManager.player.currentHealth, objectManager.player.maxHealth), barX, barY + barHeight + 5, 16, BLACK);
     // Draw UI elements here if needed
     // aka things that exist directly in screen space
 

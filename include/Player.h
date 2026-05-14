@@ -19,6 +19,9 @@ private:
     std::string lastSavedMapName = "";
 
 public:
+    int maxHealth = 100;
+    int currentHealth = 100;
+
     void Input(DimensionManager& dimManager, CameraManager& cameraManager);
     void DrawDebug(const DimensionManager& dimManager) const override;
     void DrawHandling_CreativeModeUI(const DimensionManager& dimManager) const;

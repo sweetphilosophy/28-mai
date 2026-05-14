@@ -5,6 +5,7 @@
 #include "ObjectManager.h"
 #include "Config.h"
 #include "CameraManager.h"
+#include "TextureManager.h"
 
 class Game {
 private:
@@ -20,6 +21,8 @@ private:
     DimensionManager dimensionManager;
     ObjectManager objectManager;
     CameraManager cameraManager;
+    TextureManager textureManager;
+    
 public:
     void run();
     Game();

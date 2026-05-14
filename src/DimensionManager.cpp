@@ -184,12 +184,7 @@ void Dimension::Update() {
     }
 }
 
-void Dimension::Draw() const {
-    // This function can be used for more complex drawing logic in the future
-    // For now, tile drawing is handled in DimensionManager::Draw_MapDebug()
-}
-
-void Dimension::Draw_MapDebug(const CameraManager& cameraManager) const {
+void Dimension::Draw(const CameraManager& cameraManager, const TextureManager& textureManager, const bool debugDraw) const {
     const Camera2D& camera = cameraManager.GetCamera();
     int screenW = GetScreenWidth();
     float zoom = (camera.zoom <= 0.0f) ? 1.0f : camera.zoom;
@@ -200,7 +195,11 @@ void Dimension::Draw_MapDebug(const CameraManager& cameraManager) const {
     int copiesEachSide = (int)std::ceil(halfViewW / mapWidthPx) + 1;
 
     for (int copy = centerCopy - copiesEachSide; copy <= centerCopy + copiesEachSide; ++copy) {
-        DrawIndividualMap(cameraManager, (float)copy * mapWidthPx);
+        if (debugDraw) {
+            DrawIndividualMap_debug(cameraManager, (float)copy * mapWidthPx); // draw color blocks for testing
+        } else {
+            DrawIndividualMap(cameraManager, textureManager, (float)copy * mapWidthPx);
+        }
     }
 }
 
@@ -224,7 +223,20 @@ Dimension& DimensionManager::GetCurrentDimension() {
     return dimensions[currentDimensionIndex];
 }
 
-void Dimension::DrawIndividualMap(const CameraManager& cameraManager, float offsetX) const {
+void Dimension::DrawIndividualMap(const CameraManager& cameraManager, const TextureManager& textureManager, float offsetX) const {
+    for (int y = 0; y < getHeight(); y++) {
+        for (int x = 0; x < getWidth(); x++) {
+            int tileID = tiles[y][x];
+            if (tileID == TileIndex::Air) {
+                continue; // Skip drawing air tiles
+            }
+            Texture2D tileTexture = textureManager.GetTextureForTileID(tileID);
+            DrawTexture(tileTexture, (int)(offsetX + x * tileWidth), (int)(y * tileHeight), WHITE);
+        }
+    }
+}
+
+void Dimension::DrawIndividualMap_debug(const CameraManager& cameraManager, float offsetX) const {
     // quick and dirty: special debug button to draw the tile IDs for testing
 
     static bool showTileIDs = false;
@@ -256,12 +268,15 @@ void DimensionManager::Update() {
     }
 }
 
-void DimensionManager::Draw() const {
-    // Placeholder for any future updates
-    // pass through dimension map vector, see id, place texture for that id at the right place
-}
+void DimensionManager::Draw(const CameraManager& cameraManager, const TextureManager& textureManager) const {
 
-void DimensionManager::Draw_MapDebug(const CameraManager& cameraManager) const {
+    // quick and dirty: toggle between normal texture drawing and debug colored rectangles with CTRL + SHIFT + 0
+    static bool showTextureDraw = false; // parameter decides original texture drawing or debug colored rectangles, toggled by CTRL + SHIFT + 0
+
+    if (IsKeyDown(KEY_LEFT_CONTROL) && IsKeyDown(KEY_LEFT_SHIFT) && IsKeyPressed(KEY_P)) {
+        showTextureDraw = !showTextureDraw;
+        TraceLog(LOG_INFO, "Toggled dimension draw mode. Now showing: %s", showTextureDraw ? "Textures" : "Debug Rectangles");
+    }
 
     if (dimensions.empty()) {
         // TraceLog(LOG_WARNING, "No dimensions to draw.");
@@ -283,6 +298,6 @@ void DimensionManager::Draw_MapDebug(const CameraManager& cameraManager) const {
             continue;
         }
 
-        dim.Draw_MapDebug(cameraManager);
+        dim.Draw(cameraManager, textureManager, showTextureDraw);
     }
 } 

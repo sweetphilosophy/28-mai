@@ -8,13 +8,14 @@ Game::Game() {
     // active dimension is the one that is drawn and updated
     // inactive dimensions are just stored in memory and can be switched to
 
-    dimensionManager.dimensions.emplace_back("assets\\misc\\Dimension0.png", isActiveDimension);
+    dimensionManager.dimensions.emplace_back("assets\\misc\\Dimension0.png", SetToActiveDimension);
 }
 
 void Game::run() {
 
     InitGameWindow();
     InitGameCamera();
+    textureManager.Init(); // must load textures only after window is initialized
 
     while (!WindowShouldClose())
     {
@@ -44,7 +45,7 @@ void Game::Draw() {
     BeginMode2D(cameraManager.GetCamera());
     // draw things that exist in the world regardless of camera view
 
-    dimensionManager.Draw_MapDebug(cameraManager);
+    dimensionManager.Draw(cameraManager, textureManager);
     objectManager.Draw(dimensionManager);
 
     EndMode2D();

@@ -21,6 +21,28 @@ constexpr bool SetToInactiveDimension = false;
 // used as parameter for dimension drawing to remove arbitray "magic" numbers in the code
 constexpr bool SetToTextureDraw = false;
 
+// InventoryManager propeties
+constexpr int inventoryCollums = 8;
+constexpr int inventoryRows = 5;
+constexpr int inventorySlotCount = inventoryCollums * inventoryRows;
+constexpr int inventorySlotSize = 40;
+constexpr int inventorySlotSpacing = 6;
+
+constexpr int inventoryNotOpenStartX = 10;
+constexpr int inventoryNotOpenStartY = 10;
+
+constexpr int inventoryOpenTotalWidth = inventoryCollums * inventorySlotSize + (inventoryCollums - 1) * inventorySlotSpacing;
+constexpr int inventoryOpenTotalHeight = inventoryRows * inventorySlotSize + (inventoryRows - 1) * inventorySlotSpacing;
+constexpr int inventoryOpenStartX = (SCREEN_WIDTH - inventoryOpenTotalWidth) / 2;
+constexpr int inventoryOpenStartY = (SCREEN_HEIGHT - inventoryOpenTotalHeight) / 2;
+
+
+// hp bar properties
+constexpr int HPbarWidth = 200;
+constexpr int HPbarHeight = 15;
+constexpr int HPbarX = SCREEN_WIDTH - HPbarWidth - 20;
+constexpr int HPbarY = 20;
+
 namespace EntityID {
     enum : int {
         PLAYER,

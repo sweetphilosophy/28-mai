@@ -6,7 +6,8 @@
 #include "Config.h"
 #include "CameraManager.h"
 #include "TextureManager.h"
-#include "inventory.h"
+#include "UI_Manager.h"
+#include "InventoryManager.h"
 
 class Game {
 private:
@@ -23,7 +24,8 @@ private:
     ObjectManager objectManager;
     CameraManager cameraManager;
     TextureManager textureManager;
-    Inventory inventory;
+    UI_Manager uiManager;
+    InventoryManager inventoryManager;
 public:
     void run();
     Game();

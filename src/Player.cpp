@@ -2,6 +2,7 @@
 #include "raylib.h"
 #include "DimensionManager.h"
 #include <ctime> // for saved map filenames
+#include <math.h> // for floor and ceil
 
 std::pair<int, int> Player::ToIndex(Vector2 mousePos) {
     int tileX = mousePos.x / tileWidth;
@@ -43,7 +44,8 @@ void Player::HandleMouseInput(Dimension& currentDimension, CameraManager& camera
     std::pair<int, int> tileIndex = ToIndex(mousePos);
     tileIndex.first = currentDimension.WrapX(tileIndex.first);
 
-    bool mousePointsToPlayer = CheckCollisionPointRec(mousePos, hitbox);
+    Rectangle tileHitbox = hitboxToTileIndexes(currentDimension, hitbox);
+    bool mousePointsToPlayer = CheckCollisionPointRec(mousePos, tileHitbox);
 
     if (IsKeyPressed(KEY_C)) {
         creativeMode = !creativeMode;
@@ -108,4 +110,25 @@ void Player::DrawHandling_CreativeModeUI(const DimensionManager& dimManager) con
         DrawText("Mouse Wheel: Cycle Tile Type", 10, 100, 20, BLACK);
         DrawText("Press Ctrl+S to Save Current Map", 10, 130, 20, BLACK);
     }
+}
+
+Rectangle Player::hitboxToTileIndexes(const Dimension& currentDimension, const Rectangle& hitbox) {
+    // Calculate the tile indexes that the hitbox occupies
+    // By doing this, we "snap" the hitbox to the tile grid
+    float leftTile = hitbox.x / tileWidth;
+    float rightTile = (hitbox.x + hitbox.width) / tileWidth;
+    float topTile = hitbox.y / tileHeight;
+    float bottomTile = (hitbox.y + hitbox.height) / tileHeight;
+
+    leftTile = floor(leftTile); // snap to left if in between
+    rightTile = ceil(rightTile); // snap to right if in between
+    topTile = floor(topTile); // snap to top if in between
+    bottomTile = ceil(bottomTile); // snap to bottom if in between
+
+    // Extend the hitbox to snap to the tile grid
+    leftTile = currentDimension.WrapX(leftTile);
+    rightTile = currentDimension.WrapX(rightTile);
+
+    // top left corner, width, height
+    return {leftTile, topTile, rightTile - leftTile, bottomTile - topTile};
 }

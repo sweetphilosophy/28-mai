@@ -94,7 +94,7 @@ void Dimension::LoadFromFile(std::string filename) {
 void Dimension::SaveToFile(std::string filename) const {
     // 1. Check if the vector is empty to avoid crashes
     if (tiles.empty() || tiles[0].empty()) {
-        // TraceLog(LOG_WARNING, "Cannot save dimension: tiles vector is empty.");
+        TraceLog(LOG_WARNING, "Cannot save dimension: tiles vector is empty.");
         return;
     }
 
@@ -123,21 +123,34 @@ void Dimension::SaveToFile(std::string filename) const {
     // 4. Export the image to a file
     // Raylib supports .png, .bmp, .tga, .jpg automatically based on extension
     if (ExportImage(mapImage, filename.c_str())) {
-        // TraceLog(LOG_INFO, "Dimension successfully saved to: %s", filename.c_str());
+        TraceLog(LOG_INFO, "Dimension successfully saved to: %s", filename.c_str());
     } else {
-        // TraceLog(LOG_ERROR, "Failed to export dimension image: %s", filename.c_str());
+        TraceLog(LOG_ERROR, "Failed to export dimension image: %s", filename.c_str());
     }
 
     // 5. Clean up the temporary image data
     UnloadImage(mapImage);
 }
 
-int Dimension::getWidth() const {
-    return (tiles.empty()) ? 0 : tiles[0].size();
+float Dimension::getWidth() const {
+    return (tiles.empty()) ? 0.0f : (float)tiles[0].size();
 }
 
-int Dimension::getHeight() const {
-    return tiles.size();
+float Dimension::getHeight() const {
+    return (float)tiles.size();
+}
+
+float Dimension::WrapX(float x) const {
+    float width = (float) getWidth();
+    if (width <= 0.0f) {
+        return x;
+    }
+
+    float wrapped = fmod(x, width);
+    if (wrapped < 0.0f) {
+        wrapped += width;
+    }
+    return wrapped;
 }
 
 int Dimension::WrapX(int x) const {
@@ -157,11 +170,11 @@ Dimension::Dimension(std::string filename, bool isActive) : isActive(isActive) {
     LoadFromFile(filename);
 }
 
-bool Dimension::inBounds(int x, int y) const {
-    return y >= 0 && y < (int)tiles.size() && x >= 0 && x < (int)tiles[y].size();
+bool Dimension::inBounds(float x, float y) const {
+    return y >= 0 && y < (float)tiles.size() && x >= 0 && x < (float)tiles[y].size();
 }
 
-bool Dimension::inBounds(std::pair<int, int> pos) const {
+bool Dimension::inBounds(std::pair<float, float> pos) const {
     return inBounds(pos.first, pos.second);
 }
 
@@ -177,9 +190,9 @@ void Dimension::Update() {
         // Validate coordinates
         if (inBounds(action.position)) {
             tiles[y][x] = action.newTileID;
-            // TraceLog(LOG_INFO, "Tile updated at (%i, %i) to ID %i", x, y, action.newTileID);
+            TraceLog(LOG_INFO, "Tile updated at (%i, %i) to ID %i", x, y, action.newTileID);
         } else {
-            // TraceLog(LOG_WARNING, "Invalid tile update position: (%i, %i)", x, y);
+            TraceLog(LOG_WARNING, "Invalid tile update position: (%i, %i)", x, y);
         }
     }
 }

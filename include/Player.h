@@ -17,6 +17,7 @@ private:
     int currentTilePlaceID = TileIndex::Dirt; // Initialize with a default tile ID
     bool creativeMode = false;
     std::string lastSavedMapName = "";
+    Rectangle hitboxToTileIndexes(const Dimension& currentDimension, const Rectangle& hitbox); // extend and snap the hibox to the tile grid, aka returning the tiles where the hitbox is located  
 
 public:
     int maxHealth = 100;

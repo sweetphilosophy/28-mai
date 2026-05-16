@@ -21,9 +21,10 @@ public:
     // filename should be a path relative to the executable, e.g. "assets\\maps\\my_map.png"
     void LoadFromFile(std::string filename);
     void SaveToFile(std::string filename) const;
-    int getWidth() const;
-    int getHeight() const;
+    float getWidth() const;
+    float getHeight() const;
     int WrapX(int x) const;
+    float WrapX(float x) const;
 
     void Update();
     // draws seemplesly looping map
@@ -38,8 +39,8 @@ public:
     bool isActive;
 
 private:
-    bool inBounds(int x, int y) const;
-    bool inBounds(std::pair<int, int> pos) const;
+    bool inBounds(float x, float y) const;
+    bool inBounds(std::pair<float, float> pos) const;
     void DrawIndividualMap(const CameraManager& cameraManager, const TextureManager& textureManager, float offsetX = 0.0f) const;
     // draws colored rectangles with togglable (TAB-key) tile ID display for testing
     void DrawIndividualMap_debug(const CameraManager& cameraManager, float offsetX = 0.0f) const;

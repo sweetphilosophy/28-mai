@@ -1,7 +1,7 @@
 #pragma once
 
-constexpr int tileWidth = 32;
-constexpr int tileHeight = 32;
+constexpr float tileWidth = 32;
+constexpr float tileHeight = 32;
 
 constexpr int targetFPS = 60;
 
@@ -25,23 +25,23 @@ constexpr bool SetToTextureDraw = false;
 constexpr int inventoryCollums = 8;
 constexpr int inventoryRows = 5;
 constexpr int inventorySlotCount = inventoryCollums * inventoryRows;
-constexpr int inventorySlotSize = 40;
-constexpr int inventorySlotSpacing = 6;
+constexpr float inventorySlotSize = 40;
+constexpr float inventorySlotSpacing = 6;
 
-constexpr int inventoryNotOpenStartX = 10;
-constexpr int inventoryNotOpenStartY = 10;
+constexpr float inventoryNotOpenStartX = 10;
+constexpr float inventoryNotOpenStartY = 10;
 
-constexpr int inventoryOpenTotalWidth = inventoryCollums * inventorySlotSize + (inventoryCollums - 1) * inventorySlotSpacing;
-constexpr int inventoryOpenTotalHeight = inventoryRows * inventorySlotSize + (inventoryRows - 1) * inventorySlotSpacing;
-constexpr int inventoryOpenStartX = (SCREEN_WIDTH - inventoryOpenTotalWidth) / 2;
-constexpr int inventoryOpenStartY = (SCREEN_HEIGHT - inventoryOpenTotalHeight) / 2;
+constexpr float inventoryOpenTotalWidth = inventoryCollums * inventorySlotSize + (inventoryCollums - 1) * inventorySlotSpacing;
+constexpr float inventoryOpenTotalHeight = inventoryRows * inventorySlotSize + (inventoryRows - 1) * inventorySlotSpacing;
+constexpr float inventoryOpenStartX = (SCREEN_WIDTH - inventoryOpenTotalWidth) / 2;
+constexpr float inventoryOpenStartY = (SCREEN_HEIGHT - inventoryOpenTotalHeight) / 2;
 
 
 // hp bar properties
-constexpr int HPbarWidth = 200;
-constexpr int HPbarHeight = 15;
-constexpr int HPbarX = SCREEN_WIDTH - HPbarWidth - 20;
-constexpr int HPbarY = 20;
+constexpr float HPbarWidth = 200;
+constexpr float HPbarHeight = 15;
+constexpr float HPbarX = SCREEN_WIDTH - HPbarWidth - 20;
+constexpr float HPbarY = 20;
 
 namespace EntityID {
     enum : int {

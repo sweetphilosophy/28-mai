@@ -6,7 +6,7 @@
 #include "Config.h"
 #include <string.h>
 
-class Player : public GroundEntity {
+struct Player : public GroundEntity {
 private:
     void HandleMovementInput(const Dimension& currentDimension);
     void HandleMouseInput(Dimension& currentDimension, CameraManager& cameraManager);
@@ -25,5 +25,7 @@ public:
 
     void Input(DimensionManager& dimManager, CameraManager& cameraManager);
     void DrawDebug(const DimensionManager& dimManager) const override;
+    // Placeholder for now, implement with animations using texture manager later
+    void Draw(const DimensionManager& dimManager) const;
     void DrawHandling_CreativeModeUI(const DimensionManager& dimManager) const;
 };

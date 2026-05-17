@@ -94,6 +94,7 @@ void Entity::Update(Dimension& currentDimension, float deltaTime) {
 
 void Entity::Draw() const {
     // draw texture based on id, use texture manager to get current frame of animation if the case
+    DrawRectangleRec(hitbox, GRAY); // Placeholder draw - replace with actual texture drawing logic
 }
 
 void Entity::DrawDebug(const DimensionManager& dimManager) const {

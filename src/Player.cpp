@@ -91,6 +91,10 @@ void Player::Input(DimensionManager& dimManager, CameraManager& cameraManager) {
     HandleSaveMapInput(currentDimension);
 }
 
+void Player::Draw(const DimensionManager& dimManager) const {
+    DrawDebug(dimManager); // temporary, replace with actual texture draw logic once implemented
+}
+
 void Player::DrawDebug(const DimensionManager& dimManager) const {
     // Draw rectangle outline for debugging using raylib function
     DrawRectangleLinesEx(hitbox, 2, RED);

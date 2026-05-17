@@ -22,9 +22,9 @@ constexpr bool SetToInactiveDimension = false;
 constexpr bool SetToTextureDraw = false;
 
 // InventoryManager propeties
-constexpr int inventoryCollums = 8;
-constexpr int inventoryRows = 5;
-constexpr int inventorySlotCount = inventoryCollums * inventoryRows;
+constexpr int   inventoryCollums = 8;
+constexpr int   inventoryRows = 5;
+constexpr int   inventorySlotCount = inventoryCollums * inventoryRows;
 constexpr float inventorySlotSize = 40;
 constexpr float inventorySlotSpacing = 6;
 
@@ -43,10 +43,30 @@ constexpr float HPbarHeight = 15;
 constexpr float HPbarX = SCREEN_WIDTH - HPbarWidth - 20;
 constexpr float HPbarY = 20;
 
+// Entity properties
+constexpr float playerSpeed = 200.0f; // Example speed value for the player
+constexpr int   playerHP = 100;
+
+constexpr float beeChasingSpeed = 80.0f;
+constexpr float beeWanderingSpeed = 40.0f;
+constexpr float beeChasingDetectionRange = tileWidth * 10.0f;
+constexpr float beeWanderingBoundingBoxX = tileWidth * 10.0f; // Size of the bounding box for wandering behavior
+constexpr float beeWanderingBoundingBoxY = tileHeight * 10.0f; // Size of the bounding box for wandering behavior
+constexpr float beeBobbleAmplitude = tileHeight * 0.25f;
+constexpr float beeBobbleFrequency = 2.0f;
+constexpr int   beeHP = 20;
+constexpr int   beeDamagePerHit = 5;
+
+// hitbox sizes
+constexpr Vector2 playerHitboxSize = {tileWidth, tileHeight * 2}; // Player is 2 tiles tall
+constexpr Vector2 beeHitboxSize = {tileWidth, tileHeight};
+
 namespace EntityID {
     enum : int {
         PLAYER,
-        BEE
+        BEE,
+        EntityCount,
+        NONE = -1
     };
 }
 
@@ -62,6 +82,16 @@ namespace TileIndex {
         Bedrock,
         BlueObsidian,
         TileCount
+    };
+}
+
+namespace DimensionID {
+    enum : int {
+        Overworld,
+        // BlueNether,
+        // RedNether,
+        // SlimeDimension,
+        DimensionCount
     };
 }
 

@@ -4,6 +4,7 @@
 #include "DimensionManager.h"
 #include <utility>
 
+
 class Entity {
 public:
     int hp;
@@ -11,7 +12,8 @@ public:
     float speed;
     Vector2 movementUnitVector;
     Rectangle hitbox;
-    int id;
+    int entityID; // Entity type identifier, e.g., player, bee, etc.
+    int dimensionID; // Dimension ID where the entity is located
     
     virtual void Update(Dimension& currentDimension, float deltaTime);
     virtual void Draw() const;

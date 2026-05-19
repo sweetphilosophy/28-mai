@@ -7,6 +7,8 @@
 #include "CameraManager.h"
 #include "TextureManager.h"
 
+class CameraManager; // Forward declaration to avoid circular dependency
+
 struct Action {
     std::pair<int, int> position;
     int newTileID;

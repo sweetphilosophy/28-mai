@@ -1,4 +1,5 @@
 #pragma once
+#include "raylib.h"
 
 constexpr float tileWidth = 32;
 constexpr float tileHeight = 32;

@@ -2,6 +2,7 @@
 #include "DimensionManager.h"
 #include <algorithm>
 #include <cmath>
+#include "Player.h"
 
 void CameraManager::Init(int screenW, int screenH) {
     camera.target = {0.0f, 0.0f};
@@ -60,12 +61,22 @@ void CameraManager::RebuildVerticalLimits(const Dimension& dim) {
     if (!std::isfinite(maxTargetY)) maxTargetY = 0.0f;
 }
 
-void CameraManager::UpdateFollow(const Rectangle& playerHitbox, const Dimension& dim) {
+void CameraManager::UpdateFollow(const Player& player, const Dimension& dim) {
+
+    Rectangle playerHitbox = player.hitbox; // TODO: replace with player.GetHitbox() 
 
     float playerCenterY = playerHitbox.y + playerHitbox.height * 0.5f;
     float playerCenterX = playerHitbox.x + playerHitbox.width * 0.5f;
 
-    camera.target.x = playerCenterX;
+    Vector2 target = {playerCenterX, playerCenterY};
+
+    target.x += player.speed * player.movementUnitVector.x * 0.5f; // Look ahead horizontally in the direction of movement
+    target.y += player.speed * player.movementUnitVector.y * 0.25f; // Look slightly ahead vertically as well
+
+    float smoothFactor = 0.08f; 
+
+    camera.target.x += (target.x - camera.target.x) * smoothFactor;
+    camera.target.y += (target.y - camera.target.y) * smoothFactor;
 
     // Clamp Y to configured vertical limits. If limits are equal we still clamp to that value.
     float clampedY = playerCenterY;

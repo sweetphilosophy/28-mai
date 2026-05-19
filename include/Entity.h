@@ -4,6 +4,8 @@
 #include "DimensionManager.h"
 #include <utility>
 
+struct Dimension; // Forward declaration to avoid circular dependency
+struct DimensionManager; // Forward declaration to avoid circular dependency
 
 class Entity {
 public:

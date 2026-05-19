@@ -86,7 +86,7 @@ void Game::InitGameWindow() {
 void Game::InitGameCamera() {
     cameraManager.Init(GetScreenWidth(), GetScreenHeight());
     cameraManager.RebuildVerticalLimits(dimensionManager.GetCurrentDimension());
-    cameraManager.UpdateFollow(objectManager.player.hitbox, dimensionManager.GetCurrentDimension());
+    cameraManager.UpdateFollow(objectManager.player, dimensionManager.GetCurrentDimension());
 }
 
 void Game::HandleFullscreenToggle() {

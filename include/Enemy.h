@@ -7,7 +7,7 @@ struct Enemy : public Entity {
 public:
 
     Enemy(Vector2 position, int dimensionID);
-    void Update(Dimension& currentDimension, float deltaTime) override;
+    virtual void Update(Dimension& currentDimension, float deltaTime);
     virtual void Update(Dimension& currentDimension, float deltaTime, const Player* player);
 
 protected:

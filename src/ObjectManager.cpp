@@ -28,7 +28,7 @@ void ObjectManager::Update(DimensionManager& dimManager, CameraManager& cameraMa
         enemy->Update(dimManager.GetCurrentDimension(), dt, &player);
     }
     
-    cameraManager.UpdateFollow(player.hitbox, dimManager.GetCurrentDimension());
+    cameraManager.UpdateFollow(player, dimManager.GetCurrentDimension());
 }
 
 void ObjectManager::Draw(DimensionManager& dimManager) const {

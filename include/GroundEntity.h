@@ -1,8 +1,11 @@
 #pragma once
 
 #include "raylib.h"
-#include "Entity.h"
 #include "DimensionManager.h"
+#include "Entity.h"
+
+struct Entity;
+struct Dimension;
 
 struct GroundEntity : public Entity {
 protected:
@@ -12,5 +15,5 @@ protected:
     float verticalVelocity = 0.0f;
 
 public:
-    void Update(Dimension& currentDimension, float deltaTime) override;
+    virtual void Update(Dimension& currentDimension, float deltaTime);
 };

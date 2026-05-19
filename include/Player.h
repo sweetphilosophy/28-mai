@@ -6,6 +6,10 @@
 #include "Config.h"
 #include <string.h>
 
+class CameraManager; // Forward declaration to avoid circular dependency
+struct Dimension; // Forward declaration to avoid circular dependency
+struct DimensionManager; // Forward declaration to avoid circular dependency
+
 struct Player : public GroundEntity {
 private:
     void HandleMovementInput(const Dimension& currentDimension);

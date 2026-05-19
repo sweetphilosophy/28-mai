@@ -60,10 +60,12 @@ constexpr int   beeHP = 20;
 constexpr int   beeDamagePerHit = 5;
 
 // world propeties
-constexpr int maxSpawnedEntities = 3;
-constexpr int entitySpawnChancePerUpdate = 100; // x% chance of spawning
-constexpr int entityDespawnChancePerUpdate = 10; // x% chance of despawning
+constexpr int   maxSpawnedEntities = 3;
+constexpr int   entitySpawnChancePerUpdate = 100; // x% chance of spawning
+constexpr int   entityDespawnChancePerUpdate = 10; // x% chance of despawning
 constexpr float randomActionUpdateFrequency = 2.f; // seconds between random action updates for entities (e.g., changing wandering direction, spawning, despawning, etc.)
+constexpr float   procentageFromScreenToTriggerCameraUpdateX = 70; // how far from the edge of the screen the player has to be to trigger camera movement
+constexpr float   procentageFromScreenToStopCameraUpdateX = 85; // how far from the edge of the screen the player has to be for camera movement to stop
 
 // hitbox sizes
 constexpr Vector2 playerHitboxSize = {tileWidth, tileHeight * 2}; // Player is 2 tiles tall

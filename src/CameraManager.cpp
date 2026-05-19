@@ -61,25 +61,68 @@ void CameraManager::RebuildVerticalLimits(const Dimension& dim) {
     if (!std::isfinite(maxTargetY)) maxTargetY = 0.0f;
 }
 
-void CameraManager::UpdateFollow(const Player& player, const Dimension& dim) {
+void CameraManager::UpdateFollow(const Player& player)
+{
+    Rectangle playerHitbox = player.hitbox;
 
-    Rectangle playerHitbox = player.hitbox; // TODO: replace with player.GetHitbox() 
+    static bool updateX = false;
 
-    float playerCenterY = playerHitbox.y + playerHitbox.height * 0.5f;
     float playerCenterX = playerHitbox.x + playerHitbox.width * 0.5f;
+    float playerCenterY = playerHitbox.y + playerHitbox.height * 0.5f;
 
-    Vector2 target = {playerCenterX, playerCenterY};
+    float halfScreen = screenW * 0.5f;
 
-    target.x += player.speed * player.movementUnitVector.x * 0.5f; // Look ahead horizontally in the direction of movement
-    target.y += player.speed * player.movementUnitVector.y * 0.25f; // Look slightly ahead vertically as well
+    float triggerRatio = procentageFromScreenToTriggerCameraUpdateX / 100.0f;
+    float stopRatio    = procentageFromScreenToStopCameraUpdateX / 100.0f;
 
-    float smoothFactor = 0.08f; 
+    // OUTER trigger zone
+    float leftBoundaryStart  = camera.target.x - halfScreen * (1.0f - triggerRatio);
+    float rightBoundaryStart = camera.target.x + halfScreen * (1.0f - triggerRatio);
 
-    camera.target.x += (target.x - camera.target.x) * smoothFactor;
-    camera.target.y += (target.y - camera.target.y) * smoothFactor;
+    // INNER stop zone
+    float leftBoundaryStop  = camera.target.x - halfScreen * (1.0f - stopRatio);
+    float rightBoundaryStop = camera.target.x + halfScreen * (1.0f - stopRatio);
 
-    // Clamp Y to configured vertical limits. If limits are equal we still clamp to that value.
+    // Start following when leaving outer safe zone
+    if (playerCenterX < leftBoundaryStart ||
+        playerCenterX > rightBoundaryStart)
+    {
+        updateX = true;
+    }
+
+    // Stop following only after re-entering inner zone
+    if (playerCenterX > leftBoundaryStop &&
+        playerCenterX < rightBoundaryStop)
+    {
+        updateX = false;
+    }
+
+    Vector2 target = { playerCenterX, playerCenterY };
+
+    // Lookahead
+    target.x += player.speed * player.movementUnitVector.x * 2.f;
+    target.y += player.speed * player.movementUnitVector.y * 0.25f;
+
+    float smoothFactor = 0.008f;
+
+    if (updateX)
+    {
+        camera.target.x +=
+            (target.x - camera.target.x) * smoothFactor;
+    }
+
+    camera.target.y +=
+        (target.y - camera.target.y) * smoothFactor;
+
+    // Clamp Y
     float clampedY = playerCenterY;
-    if (minTargetY <= maxTargetY) clampedY = std::max(minTargetY, std::min(playerCenterY, maxTargetY));
+
+    if (minTargetY <= maxTargetY)
+    {
+        clampedY =
+            std::max(minTargetY,
+            std::min(playerCenterY, maxTargetY));
+    }
+
     camera.target.y = clampedY;
 }

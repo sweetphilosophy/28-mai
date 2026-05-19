@@ -35,7 +35,7 @@ void ObjectManager::Update(DimensionManager& dimManager, CameraManager& cameraMa
         HandleEntityDespawning(dimManager.GetCurrentDimension(), cameraManager);
     }
 
-    cameraManager.UpdateFollow(player, dimManager.GetCurrentDimension());
+    cameraManager.UpdateFollow(player);
 }
 
 void ObjectManager::Draw(DimensionManager& dimManager) const {

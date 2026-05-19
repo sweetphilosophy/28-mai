@@ -23,4 +23,5 @@ private:
     void HandlePlayerEntityInteractions(Dimension& currentDimension);
     void HandleEntitySpawning(Dimension& currentDimension);
     void HandleEntityDespawning(Dimension& currentDimension);
+    bool ShouldUpdateRandomEntityAction(float dt);
 };

@@ -47,10 +47,6 @@ void Player::HandleMouseInput(Dimension& currentDimension, CameraManager& camera
     Rectangle tileHitbox = hitboxToTileIndexes(currentDimension, hitbox);
     bool mousePointsToPlayer = CheckCollisionPointRec(mousePos, tileHitbox);
 
-    if (IsKeyPressed(KEY_C)) {
-        creativeMode = !creativeMode;
-    }
-
     // temporary condition, replace with "debug mode" or "level editor mode" toggle later
     if (!creativeMode) {
         return; // Only allow instant tile placement in creative mode
@@ -63,16 +59,40 @@ void Player::HandleMouseInput(Dimension& currentDimension, CameraManager& camera
     }
 
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && !mousePointsToPlayer) {
+
+        if (!mouseInPlayerReach(mousePos)) {
+            return; // Don't allow interaction if the mouse is too far from the player
+        }
+
         // Enqueue an action to change the tile at tileIndex to a new tile ID (e.g., Air)
         Action action = {tileIndex, TileIndex::Air};
         currentDimension.updateQueue.push(action);
     }
 
     if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON) && !mousePointsToPlayer) {
+        
+        if (!mouseInPlayerReach(mousePos)) {
+            return; // Don't allow interaction if the mouse is too far from the player
+        }
+
         // Enqueue an action to change the tile at tileIndex to a new tile ID (e.g., Dirt)
         Action action = {tileIndex, currentTilePlaceID};
         currentDimension.updateQueue.push(action);
     }
+
+    // TODO: attack enemy logic
+}
+
+bool Player::mouseInPlayerReach(Vector2 mousePos) {
+    // Get player coordinates in world space
+    Vector2 playerWorldPos = {hitbox.x + hitbox.width / 2, hitbox.y + hitbox.height / 2};
+
+    int playerMouseDistanceIndexX = abs(playerWorldPos.x - mousePos.x) / tileWidth;
+    int playerMouseDistanceIndexY = abs(playerWorldPos.y - mousePos.y) / tileHeight;
+
+    int totalDistanceIndex = playerMouseDistanceIndexX + playerMouseDistanceIndexY;
+
+    return (totalDistanceIndex <= playerReach);
 }
 
 void Player::HandleSaveMapInput(Dimension& currentDimension) {
@@ -89,6 +109,10 @@ void Player::Input(DimensionManager& dimManager, CameraManager& cameraManager) {
     HandleMovementInput(currentDimension);
     HandleMouseInput(currentDimension, cameraManager);
     HandleSaveMapInput(currentDimension);
+
+    if (IsKeyPressed(KEY_C)) {
+        creativeMode = !creativeMode;
+    }
 }
 
 void Player::Draw(const DimensionManager& dimManager) const {

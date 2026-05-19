@@ -13,7 +13,7 @@ bool Entity::CollisionCheck(const Entity& other) const {
     return CheckCollisionRecs(this->hitbox, other.hitbox);
 }
 
-bool Entity::IsSolidTile(const Dimension& currentDimension, int tileX, int tileY) const {
+bool Entity::IsSolidTile(const Dimension& currentDimension, int tileX, int tileY) {
     if (tileY < 0 || tileY >= (int)currentDimension.tiles.size()) {
         return false;
     }
@@ -35,7 +35,7 @@ bool Entity::RectangleHitsSolidTile(const Dimension& currentDimension, const Rec
 
     for (int y = top; y <= bottom; ++y) {
         for (int x = left; x <= right; ++x) {
-            if (IsSolidTile(currentDimension, x, y)) {
+            if (Entity::IsSolidTile(currentDimension, x, y)) {
                 return true;
             }
         }
@@ -63,6 +63,22 @@ void Entity::SnapToGround(const Dimension& currentDimension) {
             }
         }
     }
+
+    // add error state handling if no solid tile is found
+    // do it with logging or throw an exception
+}
+
+int Entity::GetAvailableTopBlockAtX(const Dimension& currentDimension, int x) {
+
+    for (int y = currentDimension.getHeight() - 1; y >= 2; --y) {
+        if (!Entity::IsSolidTile(currentDimension, x, y)) {
+            return y;
+        }
+    }
+
+    TraceLog(LOG_WARNING, "No solid tile found at x=%i. Going to fallback level.", x);
+    // Return ground level if no solid tile found
+    return 36; // average hardcoded ground level
 
     // add error state handling if no solid tile is found
     // do it with logging or throw an exception

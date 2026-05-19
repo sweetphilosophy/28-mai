@@ -19,9 +19,11 @@ private:
 
     // for level editor / creative mode
     int currentTilePlaceID = TileIndex::Dirt; // Initialize with a default tile ID
-    bool creativeMode = false;
+    bool creativeMode = true;
     std::string lastSavedMapName = "";
-    Rectangle hitboxToTileIndexes(const Dimension& currentDimension, const Rectangle& hitbox); // extend and snap the hibox to the tile grid, aka returning the tiles where the hitbox is located  
+    Rectangle hitboxToTileIndexes(const Dimension& currentDimension, const Rectangle& hitbox); // extend and snap the hibox to the tile grid, aka returning the tiles where the hitbox is located
+
+    bool mouseInPlayerReach(Vector2 mouseWorldPos);
 
 public:
     int maxHealth = 100;

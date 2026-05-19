@@ -45,6 +45,7 @@ constexpr float HPbarX = SCREEN_WIDTH - HPbarWidth - 20;
 constexpr float HPbarY = 20;
 
 // Entity properties
+constexpr int   playerReach = 5; // max interaction range with enemies and tiles 
 constexpr float playerSpeed = 200.0f; // Example speed value for the player
 constexpr int   playerHP = 100;
 
@@ -57,6 +58,11 @@ constexpr float beeBobbleAmplitude = tileHeight * 0.25f;
 constexpr float beeBobbleFrequency = 2.0f;
 constexpr int   beeHP = 20;
 constexpr int   beeDamagePerHit = 5;
+
+// world propeties
+constexpr int maxSpawnedEntities = 3;
+constexpr int entitySpawnChancePerUpdate = 100; // x% chance of spawning
+constexpr float randomActionUpdateFrequency = 2.f; // seconds between random action updates for entities (e.g., changing wandering direction, spawning, despawning, etc.)
 
 // hitbox sizes
 constexpr Vector2 playerHitboxSize = {tileWidth, tileHeight * 2}; // Player is 2 tiles tall

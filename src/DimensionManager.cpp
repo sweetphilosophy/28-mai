@@ -132,10 +132,12 @@ void Dimension::SaveToFile(std::string filename) const {
     UnloadImage(mapImage);
 }
 
+// in indexes, not pixels
 float Dimension::getWidth() const {
     return (tiles.empty()) ? 0.0f : (float)tiles[0].size();
 }
 
+// in indexes, not pixels
 float Dimension::getHeight() const {
     return (float)tiles.size();
 }
@@ -190,7 +192,7 @@ void Dimension::Update() {
         // Validate coordinates
         if (inBounds(action.position)) {
             tiles[y][x] = action.newTileID;
-            TraceLog(LOG_INFO, "Tile updated at (%i, %i) to ID %i", x, y, action.newTileID);
+            // TraceLog(LOG_INFO, "Tile updated at (%i, %i) to ID %i", x, y, action.newTileID);
         } else {
             TraceLog(LOG_WARNING, "Invalid tile update position: (%i, %i)", x, y);
         }

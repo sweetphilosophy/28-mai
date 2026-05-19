@@ -20,13 +20,18 @@ public:
     virtual void Update(Dimension& currentDimension, float deltaTime);
     virtual void Draw() const;
     virtual void DrawDebug(const DimensionManager& dimManager) const;
-    
+    Vector2 GetCenter() const {
+        return { hitbox.x + hitbox.width / 2, hitbox.y + hitbox.height / 2 };
+    }
+    static int GetAvailableTopBlockAtX(const Dimension& currentDimension, int x);
+
+    static bool IsSolidTile(const Dimension& currentDimension, int tileX, int tileY);
+
 protected:
     bool CollisionCheck(const Entity& other) const;
     bool OnGroundCheck(const Dimension& currentDimension) const;
     void SnapToGround(const Dimension& currentDimension);
     void SnapToSideTile(const Dimension& currentDimension, float nextX, bool movingRight);
-    bool IsSolidTile(const Dimension& currentDimension, int tileX, int tileY) const;
     bool RectangleHitsSolidTile(const Dimension& currentDimension, const Rectangle& rect) const;
 
     std::pair<int, int> ToIndex(Vector2 position) const;

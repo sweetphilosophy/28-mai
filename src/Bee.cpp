@@ -65,6 +65,8 @@ void Bee::DrawDebug(const DimensionManager& dimManager) const {
 
 void Bee::HandleWondering() {
     
+    SetRandomSeed(GetTime()); // Ensure randomness for wandering behavior
+
     if (isChasing) return;
     if (isRebounding) return;
     

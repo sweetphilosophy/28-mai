@@ -14,6 +14,7 @@ public:
 
     const Camera2D& GetCamera() const { return camera; }
     Vector2 ScreenToWorld(Vector2 screenPos) const { return GetScreenToWorld2D(screenPos, camera); }
+    Vector2 WorldToScreen(Vector2 worldPos) const { return GetWorldToScreen2D(worldPos, camera); }
 
 private:
     Camera2D camera{};

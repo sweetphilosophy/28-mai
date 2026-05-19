@@ -6,6 +6,9 @@ void UI_Manager::draw(ObjectManager& objectManager, InventoryManager& InventoryM
     InventoryManager.Draw();
 
     DrawHPbar(objectManager);
+
+    // draw debug coordinates
+    DrawText(TextFormat("Player Position: (%.0f, %.0f)", objectManager.player.hitbox.x / tileWidth, objectManager.player.hitbox.y / tileHeight), SCREEN_WIDTH - 800, 40, 16, BLACK);
 }
 
 void UI_Manager::DrawHPbar(const ObjectManager& objectManager) const {

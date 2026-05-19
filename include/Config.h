@@ -62,6 +62,7 @@ constexpr int   beeDamagePerHit = 5;
 // world propeties
 constexpr int maxSpawnedEntities = 3;
 constexpr int entitySpawnChancePerUpdate = 100; // x% chance of spawning
+constexpr int entityDespawnChancePerUpdate = 10; // x% chance of despawning
 constexpr float randomActionUpdateFrequency = 2.f; // seconds between random action updates for entities (e.g., changing wandering direction, spawning, despawning, etc.)
 
 // hitbox sizes

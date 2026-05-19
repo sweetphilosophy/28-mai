@@ -26,6 +26,7 @@ public:
     static int GetAvailableTopBlockAtX(const Dimension& currentDimension, int x);
 
     static bool IsSolidTile(const Dimension& currentDimension, int tileX, int tileY);
+    bool inScreenBounds(const CameraManager& cameraManager) const;
 
 protected:
     bool CollisionCheck(const Entity& other) const;
@@ -33,7 +34,6 @@ protected:
     void SnapToGround(const Dimension& currentDimension);
     void SnapToSideTile(const Dimension& currentDimension, float nextX, bool movingRight);
     bool RectangleHitsSolidTile(const Dimension& currentDimension, const Rectangle& rect) const;
-
     std::pair<int, int> ToIndex(Vector2 position) const;
 
     bool isJumping = false; 

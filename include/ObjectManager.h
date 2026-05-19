@@ -22,6 +22,6 @@ private:
     // placeholder functions (for now)
     void HandlePlayerEntityInteractions(Dimension& currentDimension);
     void HandleEntitySpawning(Dimension& currentDimension);
-    void HandleEntityDespawning(Dimension& currentDimension);
+    void HandleEntityDespawning(Dimension& currentDimension, const CameraManager& cameraManager);
     bool ShouldUpdateRandomEntityAction(float dt);
 };

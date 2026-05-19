@@ -1,6 +1,7 @@
 #include "Entity.h"
 #include "raylib.h"
 #include "Config.h"
+#include <memory>
 #include <cmath>
 
 std::pair<int, int> Entity::ToIndex(Vector2 position) const {
@@ -115,4 +116,11 @@ void Entity::Draw() const {
 
 void Entity::DrawDebug(const DimensionManager& dimManager) const {
     DrawRectangleLinesEx(hitbox, 2, RED);
+}
+
+bool Entity::inScreenBounds(const CameraManager& cameraManager) const {
+    Vector2 worldPos = { hitbox.x, hitbox.y };
+    Vector2 screenPos = cameraManager.WorldToScreen(worldPos);
+    return screenPos.x + hitbox.width > 0 && screenPos.x < SCREEN_WIDTH &&
+           screenPos.y + hitbox.height > 0 && screenPos.y < SCREEN_HEIGHT;
 }

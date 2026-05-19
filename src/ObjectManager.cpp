@@ -32,7 +32,7 @@ void ObjectManager::Update(DimensionManager& dimManager, CameraManager& cameraMa
     if (ShouldUpdateRandomEntityAction(dt)) {
         HandlePlayerEntityInteractions(dimManager.GetCurrentDimension());
         HandleEntitySpawning(dimManager.GetCurrentDimension());
-        HandleEntityDespawning(dimManager.GetCurrentDimension());
+        HandleEntityDespawning(dimManager.GetCurrentDimension(), cameraManager);
     }
 
     cameraManager.UpdateFollow(player, dimManager.GetCurrentDimension());
@@ -108,8 +108,28 @@ void ObjectManager::HandleEntitySpawning(Dimension& currentDimension) {
     TraceLog(LOG_INFO, "Spawned new enemy at (%.2f, %.2f). Total enemies: %i", spawnX / tileWidth, spawnY / tileHeight, (int)enemies.size());
 }
 
-void ObjectManager::HandleEntityDespawning(Dimension& currentDimension) {
+void ObjectManager::HandleEntityDespawning(Dimension& currentDimension, const CameraManager& cameraManager) {
+    SetRandomSeed(GetTime()); // Ensure randomness for despawning behavior
+
     // Placeholder for entity despawning logic (e.g., removing enemies that are too far away)
+
+    for (auto it = enemies.begin(); it != enemies.end(); ) {
+        // Roll a percentage chance to despawn
+        int roll = GetRandomValue(1, 100);
+        if (roll > entityDespawnChancePerUpdate) {
+            ++it;
+            continue;
+        }
+
+        // if is on camera, don't despawn
+        if ((*it)->inScreenBounds(cameraManager)) {
+            ++it;
+            continue;
+        }
+
+        TraceLog(LOG_INFO, "Despawning enemy at (%.2f, %.2f). Total enemies after despawn: %i", (*it)->hitbox.x / tileWidth, (*it)->hitbox.y / tileHeight, (int)enemies.size() - 1);
+        it = enemies.erase(it);
+    }
 }
 
 bool ObjectManager::ShouldUpdateRandomEntityAction(float dt) {
